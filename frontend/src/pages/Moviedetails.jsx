@@ -202,7 +202,12 @@ const Moviedetails = () => {
 
             <h3 className="font-semibold text-white mb-2">Overview</h3>
             <p className="text-gray-200">{movie.overview}</p>
+            <button type="button" 
+              className='bg-[#e50914] text-white py-2 px-5 rounded text-base hover:opacity-90 cursor-pointer mt-5'
+              onClick={() => navigate("#")}
+            >See Reviews</button>
           </div>
+          
         </div>
       </div>
 

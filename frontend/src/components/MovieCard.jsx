@@ -32,7 +32,7 @@ function MovieCard({ movie, type }) {
                 <p className="text-xs text-gray-400">{movie.release_date?.split("-")[0]}</p>
             </div>
             <button type="button" 
-                className='bg-[#e50914] text-white py-2 px-5 rounded text-base hover:opacity-90 cursor-pointer mt-5'
+                className='bg-[#e50914] text-white py-2 px-5 rounded text-base hover:opacity-90 cursor-pointer mt-2'
                 onClick={() => navigate("/rating-review")}
             >Rate and Review</button>
         </div>

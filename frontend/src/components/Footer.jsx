@@ -7,9 +7,9 @@ const Footer = () => {
       <p className="pb-5">Questions? Contact us:</p>
 
       <div className="grid grid-cols-2 md:grid-cols-4 text-sm pb-10 max-w-5xl text-center">
-        <a href="ronkeadun1@yahoo.com">E-mail <i className="fa fa-envelope"></i></a>
-        <a href="https:/m.facebook.com/help">Facebook <i className="fa fa-facebook-f"></i></a>
-        <a href="https://help.instagram.com">Instagram <i className="fa fa-instageam"></i></a>
+        <a href="ronkeadun1@yahoo.com" className="hover:text-[#e50914]">E-mail <i className="fa fa-envelope p-3"></i></a>
+        <a href="https:/m.facebook.com/help" className="hover:text-[#e50914]">Facebook <i className="fab fa-facebook p-3"></i></a>
+        <a href="https://help.instagram.com" className="hover:text-[#e50914]">Instagram <i className="fab fa-instagram p-3"></i></a>
       </div>
     </div>
   );

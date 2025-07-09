@@ -1,23 +1,59 @@
 const Watchlist = require('../models/Watchlist');
 
-exports.addWatchList =  async (req, res) => {
+
+// POST /api/watchlist
+exports.addWatchList = async (req, res) => {
+  const { userId, movie } = req.body;
+  try {
+    let userList = await Watchlist.findOne({ userId });
+    // Create doc if non exists
+    if (!userList) {
+      userList = new Watchlist({ userId, watchlist: [movie] }); 
+    }else{
+      //Prevent Duplicate
+      const alreadyExists = userList.watchlist.some(item => item.id === movie.id)
+      if (alreadyExists) {
+        return res.status(409).json({ message: "Movie already in watchlist" });
+      }
+      userList.watchlist.push(movie)
+    }
+    await userList.save();
+    res.status(201).json(userList);
+  } catch (error) {
+    res.status(500).json({ message: "Error adding to watchlist", error });
+  }
+};
+
+/*exports.addWatchList =  async (req, res) => {
   const { userId, movie } = req.body;
   const update = { $addToSet : {watchlist : movie}}
-  let userList = await Watchlist.findOneAndUpdate({ userId }, update, {upsert: true, new: true});
-  res.json(userList);
-}
+  try{
+    let userList = await Watchlist.findOneAndUpdate({ userId }, update, {upsert: true, new: true});
+    res.status(201).json(userList);
+  }catch (error) {
+    res.status(500).json({ message: "Error adding to watchlist", error });
+  }
+}*/
 
 exports.getWatchList =  async (req, res) => {
-  const userList = await Watchlist.findOne({ userId: req.params.userId });
-  res.json(userList ? userList.watchlist : []);
+  try{
+    const userList = await Watchlist.findOne({ userId: req.params.userId });
+    res.json(userList ? userList : {});
+  }catch (error) {
+    res.status(500).json({ message: "Error fetching watchlist", error });
+  }
 }
 
 exports.deleteWatchList =  async (req, res) => {
   const { userId, movieId } = req.params;
-  const userList = await Watchlist.findOne({ userId });
-  if (userList) {
-    userList.watchlist = userList.watchlist.filter(movie => movie.id != movieId);
-    await userList.save();
+  try{
+    const userList = await Watchlist.findOne({ userId });
+    if (userList) {
+      userList.watchlist = userList.watchlist.filter(movie => movie.id != movieId);
+      await userList.save();
+    }
+    res.json(userList ? userList.watchlist : []);
+  }catch (error) {
+    res.status(500).json({ message: "Error removing from watchlist", error });
   }
-  res.json(userList ? userList.watchlist : []);
 }

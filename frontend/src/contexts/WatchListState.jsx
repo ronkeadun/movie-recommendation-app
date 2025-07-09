@@ -1,5 +1,6 @@
 import { createContext, useReducer, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import WatchListReducer from "./WatchListReducer";
 import { useAuthStore } from "../store/authStore"
 
@@ -33,7 +34,6 @@ export const WatchListProvider = ({ children }) => {
           axios.get(`${API_BASE_URL}/api/watchlist/${userId}`),
           axios.get(`${API_BASE_URL}/api/watched/${userId}`)
         ]);
-        console.log("Got watchlist:", watchlistRes.data)
         dispatch({ type: "SET_WATCHLIST", payload: Array.isArray(watchlistRes.data?.watchlist) ? watchlistRes.data.watchlist : [] });
         dispatch({ type: "SET_WATCHED", payload: Array.isArray(watchedRes.data?.watched) ? watchedRes.data.watched : [] });
       } catch (err) {
@@ -43,55 +43,20 @@ export const WatchListProvider = ({ children }) => {
     fetchData();
   }, [userId]);
 
-  /*useEffect(() => {
-    const fetchWatchlist = async () => {
-      if (!userId) {
-        console.log("No userid yet");
-        return
-      }
-      try {
-        const res = await axios.get(`${API_BASE_URL}/api/watchlist/${userId}`);
-        console.log("Got watchlist:", res.data)
-        dispatch({ type: "SET_WATCHLIST", payload: Array.isArray(res.data.watchlist) ? res.data.watchlist : [] });
-      } catch (err) {
-        console.error("Fetch watchlist error:", err)
-      }  
-    };
-    fetchWatchlist();
-  }, [userId]);
-
-  useEffect(() => {
-      const fetchWatched = async () => {
-        if (!userId) {
-          return
-        }
-        try {
-          const watchedRes = await axios.get(`${API_BASE_URL}/api/watched/${userId}`);
-          dispatch({ type: "SET_WATCHED", payload: Array.isArray( watchedRes.data) ? watchedRes.data.watched : [] });
-        } catch (err) {
-          console.error("Fetch watched error:", err)
-        }
-        fetchWatched();
-    }
-  }, [userId]);
-
-  /*useEffect(() => {
-    localStorage.setItem("watchlist", JSON.stringify(state.watchlist));
-    localStorage.setItem("watched", JSON.stringify(state.watched));
-  }, [state]);*/
-
-
   // actions
   const addMovieToWatchlist = async (movie) => {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/watchlist`, { userId, movie });
-      if(res.status === 200) {
         dispatch({ type: "ADD_MOVIE_TO_WATCHLIST", payload: movie });
+      } catch (err) {
+      if (err.response?. status === 409) {
+        toast.error("Movie already in watchlist")
+        console.error("Add to watchlist error:", err)
+      } else {
+        toast.error ("Failed to add to watchlist")
       }
-    } catch (err) {
-      console.error("Add to watchlist error:", err)
-    }
-  };
+    };
+  }
 
   const removeMovieFromWatchlist = async (movieId) => {
     try {
@@ -104,11 +69,16 @@ export const WatchListProvider = ({ children }) => {
 
   const addMovieToWatched = async (movie) => {
     try {
-      await axios.post(`${API_BASE_URL}/api/watched`, { userId, movie });
-      dispatch({ type: "ADD_MOVIE_TO_WATCHED", payload: movie });
+      const res = await axios.post(`${API_BASE_URL}/api/watched`, { userId, movie });
+        dispatch({ type: "ADD_MOVIE_TO_WATCHED",  payload: movie });
     } catch (err) {
-      console.error("Add to watched error:", err)
-    }
+      if (err.response?. status === 409) {
+        toast.error("Movie already in watched")
+        console.error("Add to watched error:", err)
+      } else {
+        toast.error ("Failed to add to watched")
+      }
+    };
   };
 
   const moveToWatchlist = async (movie) => {
@@ -116,8 +86,13 @@ export const WatchListProvider = ({ children }) => {
       await axios.post(`${API_BASE_URL}/api/watched/move`, { userId, movie });
       dispatch({ type: "MOVE_TO_WATCHLIST", payload: movie });
     } catch (err) {
-      console.error("Move to watchlist error:", err)
-    }
+      if (err.response?. status === 409) {
+        toast.error("Movie already in watchlist")
+        console.error("Add to watchlist error:", err)
+      } else {
+        toast.error ("Failed to move to watchlist")
+      }
+    };
   };
 
   const removeFromWatched = async (movieId) => {

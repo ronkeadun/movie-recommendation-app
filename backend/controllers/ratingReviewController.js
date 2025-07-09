@@ -28,8 +28,12 @@ exports.getReviews = async (req, res) => {
 exports.updateReview = async (req, res) => {
   const { reviewId } = req.params;
   const { rating, review } = req.body;
-  const ratingReview = await RatingReview.findByIdAndUpdate(reviewId, { rating, review }, { new: true });
-  res.json(ratingReview);
+  try{
+    const ratingReview = await RatingReview.findByIdAndUpdate(reviewId, { rating, review }, { new: true });
+    res.json(ratingReview);
+  }catch (err) {
+    res.status(500).json({ message: 'Failed to update reviews' });
+  }
 };
 
 exports.deleteReview = async (req, res) => {
