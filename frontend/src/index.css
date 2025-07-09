@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@import "./css/MovieList.css";
+
+@import "./css/Favorites.css";
+
+@import "./css/WatchList.css";
+
+@import "./css/Navbar.css";
+
+@import "./css/MovieCard.css";
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #181818;
+  color: #fff;
+}
