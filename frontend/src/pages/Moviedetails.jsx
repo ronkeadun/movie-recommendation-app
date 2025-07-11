@@ -71,6 +71,12 @@ const Moviedetails = () => {
       else addToFavorites(movie)
   }
 
+  const goToReviews = () => {
+    navigate("/rating-review", {
+      state: { movieId: movie.id } // Pass movieId as state
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[#181818] text-white mt-20">
       <div
@@ -204,8 +210,8 @@ const Moviedetails = () => {
             <p className="text-gray-200">{movie.overview}</p>
             <button type="button" 
               className='bg-[#e50914] text-white py-2 px-5 rounded text-base hover:opacity-90 cursor-pointer mt-5'
-              onClick={() => navigate("#")}
-            >See Reviews</button>
+              onClick={goToReviews}
+            >View Ratings & Reviews</button>
           </div>
           
         </div>

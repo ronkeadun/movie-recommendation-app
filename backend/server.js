@@ -28,7 +28,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/watchlist', watchlistRoutes);
 app.use('/api/watched', watchedRoutes);
-app.use('/api/ratings-reviews', ratingReviewsRoutes);
+app.use('/api/rating-reviews', ratingReviewsRoutes);
 
 // 404 handler for invalid routes
 app.use((req, res, next) => {

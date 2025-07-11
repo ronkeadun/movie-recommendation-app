@@ -14,7 +14,7 @@ import AIRecommendations from "./pages/AIRecommendations";
 import { AddMovies } from "./pages/AddMovies";
 import { Watched } from "./pages/Watched";
 import { Watchlist } from "./pages/Watchlist";
-import RatingReview from "./pages/RatingReview";
+import RatingReviewPage from "./pages/RatingReviewPage";
 
 
 const App = () => {
@@ -45,10 +45,10 @@ const App = () => {
                 <Route element={<ProtectedRoute user={user} />} >
                     <Route path="/favorites" element={<Favorites />} />
                     <Route exact path="/watchlist" element={<Watchlist />}/>
+                    <Route exact path="/rating-review" element={<RatingReviewPage />}/>
                 </Route>
                 <Route path="/watched" element={<Watched />} />
                 <Route path="/addmovies" element={<AddMovies />} />
-                <Route path="/rating-review" element={<RatingReview /> } />
                 <Route path="/ai-recommendations" element={<AIRecommendations />} />
             </Routes>
             <Footer />

@@ -23,17 +23,6 @@ exports.addWatched = async (req, res) => {
   }
 };
 
-/*exports.addWatched =  async (req, res) => {
-  const { userId, movie } = req.body;
-  const update = { $addToSet : {watched : movie}}
-  try{
-    let userList = await Watched.findOneAndUpdate({ userId }, update, {upsert: true, new: true});
-    res.json(userList);
-  }catch (error) {
-    res.status(500).json({ message: "Error adding to watched", error });
-  }
-}*/
-
 exports.getWatched =  async (req, res) => {
   try{
     const userList = await Watched.findOne({ userId: req.params.userId });
@@ -57,65 +46,41 @@ exports.deleteWatched =  async (req, res) => {
   }
 }
 
-/*exports.moveWatched =  async (req, res) => {
-  const { userId, movie } = req.body;
-  try{
-    let userList = await Watched.findOne({ userId });
-    if (!userList) {
-      userList = new Watched({ userId, watched: [] });
-    }
-    userList.watched.push(movie);
-    await userList.save();
-
-    const watchlist = await Watchlist.findOne({ user: userId });
-    if (watchlist) {
-      watchlist.movies = watchlist.movies.filter(m => m.toString() !== movie._id);
-      await watchlist.save();
-    }
-
-    res.json({ userList, watchlist });
-  }catch (error) {
-    res.status(500).json({ message: "Error moving to watched", error });
-  }
-}*/
-
 exports.moveWatched = async (req, res) => {
   const { userId, movie } = req.body;
 
   try {
-    // 1. Remove from watched
-    let watchedDoc = await Watched.findOne({ userId });
-    if (!watchedDoc) {
-      return res.status(404).json({ message: "Watched list not found" });
-    }
-
-    const isInWatched = watchedDoc.watched.some(m => m.id === movie.id);
-    if (!isInWatched) {
-      return res.status(404).json({ message: "Movie not found in watched list" });
-    }
-
-    // Remove the movie
-    watchedDoc.watched = watchedDoc.watched.filter(m => m.id !== movie.id);
-    await watchedDoc.save();
-
-    // 2. Add to watchlist only if not present
+    // 1. Remove from watchlist
     let watchlistDoc = await Watchlist.findOne({ userId });
 
     if (!watchlistDoc) {
-      watchlistDoc = new Watchlist({ userId, watchlist: [movie] });
-    } else {
-      const alreadyInWatchlist = watchlistDoc.watchlist.some(m => m.id === movie.id);
-      if (!alreadyInWatchlist) {
-        watchlistDoc.watchlist.push(movie);
-      } else {
-        return res.status(409).json({ message: "Moved to watchlist (already existed)", watchlist: watchlistDoc.watchlist });
-      }
+      return res.status(404).json({ message: "Watchlist not found" });
     }
 
+    const isInWatchlist = watchlistDoc.watchlist.some(m => m.id === movie.id);
+    if (!isInWatchlist) {
+      return res.status(404).json({ message: "Movie not found in watchlist" });
+    }
+
+    // Remove movie from watchlist
+    watchlistDoc.watchlist = watchlistDoc.watchlist.filter(m => m.id !== movie.id);
     await watchlistDoc.save();
 
-    return res.status(200).json({ message: "Successfully moved to watchlist", watchlist: watchlistDoc.watchlist });
+    // 2. Add to watched only if not already there
+    let watchedDoc = await Watched.findOne({ userId });
 
+    if (!watchedDoc) {
+      watchedDoc = new Watched({ userId, watched: [movie] });
+    } else {
+      const alreadyWatched = watchedDoc.watched.some(m => m.id === movie.id);
+      if (!alreadyWatched) {
+        watchedDoc.watched.push(movie);
+      } else {
+        return res.status(409).json({ message: "Movie already in watched list", watched: watchedDoc.watched });
+      }
+    }
+    await watchedDoc.save();
+    return res.status(200).json({ message: "Successfully moved to watched", watched: watchedDoc.watched });
   } catch (error) {
     console.error("Error moving movie:", error);
     return res.status(500).json({ message: "Server error", error });

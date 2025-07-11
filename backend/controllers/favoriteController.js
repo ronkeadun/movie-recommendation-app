@@ -12,9 +12,8 @@ exports.addFavorites = async (req, res) => {
         userFav.favorites.push(movie);
       }
     }
-
     await userFav.save();
-    res.json(userFav);
+    res.status(201).json(userFav);
   }catch (error) {
     res.status(500).json({ message: "Error adding to favorites", error });
   }

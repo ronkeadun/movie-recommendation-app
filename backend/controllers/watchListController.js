@@ -1,7 +1,6 @@
 const Watchlist = require('../models/Watchlist');
 
 
-// POST /api/watchlist
 exports.addWatchList = async (req, res) => {
   const { userId, movie } = req.body;
   try {
@@ -23,17 +22,6 @@ exports.addWatchList = async (req, res) => {
     res.status(500).json({ message: "Error adding to watchlist", error });
   }
 };
-
-/*exports.addWatchList =  async (req, res) => {
-  const { userId, movie } = req.body;
-  const update = { $addToSet : {watchlist : movie}}
-  try{
-    let userList = await Watchlist.findOneAndUpdate({ userId }, update, {upsert: true, new: true});
-    res.status(201).json(userList);
-  }catch (error) {
-    res.status(500).json({ message: "Error adding to watchlist", error });
-  }
-}*/
 
 exports.getWatchList =  async (req, res) => {
   try{

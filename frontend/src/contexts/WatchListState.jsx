@@ -37,6 +37,7 @@ export const WatchListProvider = ({ children }) => {
         dispatch({ type: "SET_WATCHLIST", payload: Array.isArray(watchlistRes.data?.watchlist) ? watchlistRes.data.watchlist : [] });
         dispatch({ type: "SET_WATCHED", payload: Array.isArray(watchedRes.data?.watched) ? watchedRes.data.watched : [] });
       } catch (err) {
+        toast.error("Error fetching watchlist or watched:", err)
         console.error("Error fetching watchlist or watched:", err)
       }  
     };
@@ -48,8 +49,9 @@ export const WatchListProvider = ({ children }) => {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/watchlist`, { userId, movie });
         dispatch({ type: "ADD_MOVIE_TO_WATCHLIST", payload: movie });
+        toast.success("Successfully added to watchlists")
       } catch (err) {
-      if (err.response?. status === 409) {
+      if (err.response?.status === 409) {
         toast.error("Movie already in watchlist")
         console.error("Add to watchlist error:", err)
       } else {
@@ -62,15 +64,17 @@ export const WatchListProvider = ({ children }) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/watchlist/${userId}/${movieId}`);
       dispatch({ type: "REMOVE_MOVIE_FROM_WATCHLIST", payload: movieId });
+      toast.success("Successfully removed from watchlists")
     } catch (err) {
-      console.error("Remove from watchlist error:", err)
+      toast.error ("Failed to remove from watchlist")
     }
   };
 
   const addMovieToWatched = async (movie) => {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/watched`, { userId, movie });
-        dispatch({ type: "ADD_MOVIE_TO_WATCHED",  payload: movie });
+      dispatch({ type: "ADD_MOVIE_TO_WATCHED",  payload: movie });
+      toast.success("Successfully added to watched")
     } catch (err) {
       if (err.response?. status === 409) {
         toast.error("Movie already in watched")
@@ -83,8 +87,10 @@ export const WatchListProvider = ({ children }) => {
 
   const moveToWatchlist = async (movie) => {
     try {
-      await axios.post(`${API_BASE_URL}/api/watched/move`, { userId, movie });
+      const res = await axios.post(`${API_BASE_URL}/api/watched/move`, { userId, movie });
       dispatch({ type: "MOVE_TO_WATCHLIST", payload: movie });
+      const { message } = res
+      toast.success(message)
     } catch (err) {
       if (err.response?. status === 409) {
         toast.error("Movie already in watchlist")
@@ -99,8 +105,9 @@ export const WatchListProvider = ({ children }) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/watched/${userId}/${movieId}`);
       dispatch({ type: "REMOVE_FROM_WATCHED", payload: movieId });
+      toast.success("Successfully removed from watched")
     } catch (err) {
-      console.error("Remove from watched error:", err)
+      toast.error ("Failed to remove from watched")
     }
   };
 

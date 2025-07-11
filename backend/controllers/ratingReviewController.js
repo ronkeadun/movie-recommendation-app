@@ -1,10 +1,10 @@
 const RatingReview = require('../models/RatingReview');
 
 exports.addReview = async (req, res) => {
-  const { movieId, rating, review } = req.body;
+  const { userId, movieId, rating, review } = req.body;
   try {
     const ratingReview = new RatingReview({
-      userId: req.user.id,
+      userId,
       movieId,
       rating,
       review
@@ -12,6 +12,7 @@ exports.addReview = async (req, res) => {
     await ratingReview.save();
     res.status(201).json(ratingReview);
   } catch (err) {
+    console.log(err.message)
     res.status(500).json({ message: 'Failed to submit review' });
   }
 };

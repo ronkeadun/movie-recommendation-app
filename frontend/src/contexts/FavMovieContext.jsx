@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { toast } from "react-hot-toast";
 import { useAuthStore } from "../store/authStore"
 
 const FavMovieContext = createContext();
@@ -9,7 +10,6 @@ const API_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
 export const FavMovieProvider = ({ children }) => {
   
   const [favorites, setFavorites] = useState([]);
-  const [ratingReviews, setRatingReviews] = useState({});
 
   const {user} = useAuthStore();
 
@@ -25,33 +25,35 @@ export const FavMovieProvider = ({ children }) => {
 
 
   const addToFavorites = async (movie) => {
-    await axios.post(`${API_BASE_URL}/api/favorites`, { userId, movie });
-    setFavorites(prev => [...prev, movie]);
+    try {
+      await axios.post(`${API_BASE_URL}/api/favorites`, { userId, movie });
+      setFavorites(prev => [...prev, movie]);
+      toast.success("Successfully added to favorites")
+    } catch (error) {
+      toast.error ("Failed to add to favorites")
+    }
   };
 
   const removeFromFavorites = async (movieId) => {
-    await axios.delete(`${API_BASE_URL}/api/favorites/${userId}/${movieId}`);
-    setFavorites(prev => prev.filter(movie => movie.id !== movieId));
+    try {
+      await axios.delete(`${API_BASE_URL}/api/favorites/${userId}/${movieId}`);
+      setFavorites(prev => prev.filter(movie => movie.id !== movieId));
+      toast.success("Successfully removed from favorites")
+    } catch (error) {
+      toast.error ("Failed to remove from favorites")
+    }
   };
 
   const isFavorite = (movieId) => {
     return favorites.some(movie => movie.id === movieId)
   }
 
-  const submitRatingReview = async (movieId, rating, review) => {
-    const res = await axios.post(`${API_BASE_URL}/api/ratings-reviews`, {
-      userId, movieId, rating, review
-    });
-    setRatingReviews(prev => ({ ...prev, [movieId]: res.data }));
-  };
-
   return (
     <FavMovieContext.Provider value={{ 
       favorites, 
       addToFavorites, 
       removeFromFavorites, 
-      isFavorite,
-      submitRatingReview
+      isFavorite
     }}>
       {children}
     </FavMovieContext.Provider>
