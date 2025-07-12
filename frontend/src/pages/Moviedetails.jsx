@@ -211,7 +211,7 @@ const Moviedetails = () => {
             <button type="button" 
               className='bg-[#e50914] text-white py-2 px-5 rounded text-base hover:opacity-90 cursor-pointer mt-5'
               onClick={goToReviews}
-            >View Ratings & Reviews</button>
+            >Ratings & Reviews</button>
           </div>
           
         </div>

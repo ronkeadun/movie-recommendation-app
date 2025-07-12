@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
@@ -24,14 +25,16 @@ const SubmitRatingReview = ({ movieId, onSuccess }) => {
         { userId, movieId, rating: Number(rating), review },
         { withCredentials: true } // important for cookie-based auth
       );
+      toast.success("Review submitted successfully!");
       // clear form and notify parent
       setRating("");
       setReview("");
       onSuccess?.(); // trigger refresh callback
     } catch (err) {
-      const errMessage = err.response?.dada?.message || "Failed to submit review. Please try again."
+      const errMessage = err.response?.data?.message || "Failed to submit review. Please try again."
       console.error(errMessage);
       setError(errMessage);
+      toast.error(errMessage)
     } finally {
       setLoading(false);
     }

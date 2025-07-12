@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
@@ -11,15 +12,15 @@ const RatingReviewDisplay = ({ movieId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const { user } = useAuthStore(); // Still needed to identify the current user
+  const { user } = useAuthStore(); // needs to identify the current user
 
   useEffect(() => {
     const fetchReviews = async () => {
       setLoading(true)
       try {
         const res = await axios.get(`${API_BASE_URL}/api/rating-reviews/${movieId}`, { withCredentials: true });
-        if (Array.isArray(res.data.reviews)) {
-          setReviews(res.data.reviews);
+        if (Array.isArray(res.data)) {
+          setReviews(res.data);
         } else {
           throw new Error("Unexpected response format");
         }
@@ -39,9 +40,11 @@ const RatingReviewDisplay = ({ movieId }) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/rating-reviews/${reviewId}`, { withCredentials: true });
       setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+      toast.success("Review deleted.")
     } catch (err) {
       console.error(err);
       setError("Failed to delete review.");
+      toast.error("Failed to delete review.");
     }
   };
 
@@ -68,10 +71,12 @@ const RatingReviewDisplay = ({ movieId }) => {
       setReviews((prev) =>
         prev.map((r) => (r._id === reviewId ? res.data : r))
       );
+      toast.success("Review Updated!")
       cancelEdit();
     } catch (err) {
       console.error(err);
       setError("Failed to update review.");
+      toast.error("Failed to update review.");
     }
   };
 
@@ -79,10 +84,10 @@ const RatingReviewDisplay = ({ movieId }) => {
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4">
+    <div className="bg-[#666] shadow-md rounded-lg p-4 mt-10">
       <h2 className="text-xl font-bold mb-4 text-center">User Ratings & Reviews</h2>
       {reviews.length === 0 ? (
-        <div className="text-center text-gray-500">No reviews yet.</div>
+        <div className="text-center text-white">No reviews yet.</div>
       ) : (
         <ul className="space-y-4">
           {reviews.map((review) => {
@@ -91,7 +96,7 @@ const RatingReviewDisplay = ({ movieId }) => {
             return (
               <li key={review._id} className="border p-4 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold text-blue-600">
+                  <span className="font-bold text-blue-900">
                     {review.userId?.username || "Anonymous"}
                   </span>
                   {!editingId || editingId !== review._id ? (
@@ -136,20 +141,20 @@ const RatingReviewDisplay = ({ movieId }) => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-gray-700">{review.review}</p>
+                  <p className="text-black">{review.review}</p>
                 )}
 
                 {isOwner && !editingId && (
                   <div className="flex gap-3 mt-2">
                     <button
                       onClick={() => startEdit(review)}
-                      className="text-sm text-indigo-600 hover:underline"
+                      className="text-sm text-indigo-700 font-bold cursor-pointer hover:underline"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(review._id)}
-                      className="text-sm text-red-600 hover:underline"
+                      className="text-sm text-red-700 font-bold cursor-pointer hover:underline"
                     >
                       Delete
                     </button>

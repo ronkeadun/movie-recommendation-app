@@ -33,8 +33,8 @@ function MovieCard({ movie, type }) {
             </div>
             <button type="button" 
                 className='bg-[#e50914] text-white py-2 px-5 rounded text-base hover:opacity-90 cursor-pointer mt-2'
-                onClick={() => navigate("/rating-review")}
-            >Rate and Review</button>
+                onClick={() => navigate(`/movie/${movie.id}`)}
+            >View Details</button>
         </div>
     )
 }

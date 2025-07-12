@@ -8,9 +8,9 @@ const RatingReviewPage = () => {
   const { state } = useLocation();
   const movieId = state?.movieId;
 
-  /*if (!movieId) {
+  if (!movieId) {
     return <div className="text-red-500 text-center text-3xl mt-30 h-100">No movie reviews yet.</div>;
-  }*/
+  }
 
   const [refresh, setRefresh] = useState(false)
 
