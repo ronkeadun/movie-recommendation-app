@@ -16,7 +16,7 @@ const initialState = {
 // create context
 export const WatchListContext = createContext(initialState);
 
-// provider components
+// provider component
 export const WatchListProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(WatchListReducer, initialState);

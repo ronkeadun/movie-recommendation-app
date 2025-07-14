@@ -46,8 +46,9 @@ exports.deleteReview = async (req, res) => {
   try {
     const ratingReview = await RatingReview.findById(reviewId);
     if (!ratingReview) return res.status(404).json({ message: 'Review not found' });
+    // ensures only the owner can delete
     if (ratingReview.userId.toString() !== req.user.id.toString()) {
-      return res.status(403).json({ message: 'Unauthorized' }); // ensures only the owner can delete
+      return res.status(403).json({ message: 'Unauthorized' }); 
     }
     await ratingReview.deleteOne();
     res.json({ message: 'Review deleted successfully' });

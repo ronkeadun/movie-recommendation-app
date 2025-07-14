@@ -12,7 +12,8 @@ const RatingReviewDisplay = ({ movieId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const { user } = useAuthStore(); // needs to identify the current user
+  // needs to identify the current user
+  const { user } = useAuthStore(); 
 
   useEffect(() => {
     const fetchReviews = async () => {

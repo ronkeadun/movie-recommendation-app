@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const User = require('../models/User');
 const Favorite = require('../models/Favorite');
 const Watchlist = require('../models/Watchlist');
@@ -40,7 +41,7 @@ exports.getReviews = async (req, res) => {
     const userId = req.user.id;       
     const reviews = await RatingReview
       .find({ userId })
-      .sort({ createdAt: -1 })              // newest first
+      .sort({ createdAt: -1 })      // newest first
     res.status(200).json(reviews);
   } catch (err) {
     console.error('getMyReviews error', err);

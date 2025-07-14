@@ -63,7 +63,8 @@ const UserProfile = () => {
       });
       toast.success("Profile updated!")
       setMessage("Profile updated successfully.");
-      await fetchUser(); // Refresh the store user
+      // Refresh the store user
+      await fetchUser(); 
     } catch (err) {
       toast.error("Failed to update profile");
       setMessage("Update failed.");

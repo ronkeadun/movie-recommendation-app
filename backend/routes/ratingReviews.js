@@ -23,9 +23,3 @@ router.patch('/:reviewId', auth, updateReview);
 router.delete('/:reviewId', auth, deleteReview);
 
 module.exports = router;
-
-
-
-/*
-router.post('/', auth, addReview);
-router.get('/:movieId', getReviews);*/

@@ -1,6 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
 const authRoutes = require('./routes/auth');
@@ -19,8 +20,10 @@ app.use(cors({origin: process.env.CLIENT_BASE_URL, credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(morgan('tiny'));
 
 const port = process.env.PORT || 5000;
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
@@ -44,7 +47,7 @@ mongoose.connect(process.env.MONGO_URI)
       console.log('Server running on port', port);
     });
   })
-.catch((err) => {
-  console.log({ err });
-  process.exit(1);
+  .catch((err) => {
+    console.log({ err });
+    process.exit(1);
 });

@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMovieContext } from "../contexts/FavMovieContext";
 import { useAuthStore } from "../store/authStore"
 
-
 const Moviedetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -73,7 +72,8 @@ const Moviedetails = () => {
 
   const goToReviews = () => {
     navigate("/rating-review", {
-      state: { movieId: movie.id } // Pass movieId as state
+      // Pass movieId as state
+      state: { movieId: movie.id } 
     });
   };
 
@@ -220,7 +220,7 @@ const Moviedetails = () => {
       {recommendations.length > 0 && (
         <div className="p-8">
           <h2 className="text-2xl font-semibold mb-4">
-            You might also like...
+            Recommended movies you might also like...
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">

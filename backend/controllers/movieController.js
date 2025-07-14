@@ -30,7 +30,7 @@ exports.searchMovies = async (req, res) => {
     let results = [];
 
     if (title) {
-      // use /search/movie
+      // use -> /search/movie
       const url = build(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}`, {
         query: title,
         year
@@ -39,7 +39,7 @@ exports.searchMovies = async (req, res) => {
       results = data.results || [];
       if (gid) results = results.filter(m => m.genre_ids.includes(gid));
     } else {
-      // no title -> /discover/movie
+      // no title use -> /discover/movie
       const url = build(`https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&sort_by=popularity.desc`, {
         with_genres: gid,
         primary_release_year: year

@@ -37,7 +37,6 @@ export const SearchResultCard = ({ movie }) => {
         <div className="header">
           <h3 className="title">{movie.title}</h3>
           <h4 className="release-date">
-            {/*<Moment format="YYYY">{movie.release_date}</Moment>*/}
             {movie.release_date}
           </h4>
         </div>

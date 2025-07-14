@@ -29,7 +29,8 @@ const SubmitRatingReview = ({ movieId, onSuccess }) => {
       // clear form and notify parent
       setRating("");
       setReview("");
-      onSuccess?.(); // trigger refresh callback
+      // trigger refresh callback
+      onSuccess?.(); 
     } catch (err) {
       const errMessage = err.response?.data?.message || "Failed to submit review. Please try again."
       console.error(errMessage);
@@ -57,7 +58,7 @@ const SubmitRatingReview = ({ movieId, onSuccess }) => {
       maxWidth: '70%',
       backgroundColor: '#666',
       textAlign: 'center'
-    }} className='h-100 shadow rounded-lg'>
+      }} className='h-100 shadow rounded-lg'>
 
       <h3 className="text-lg font-semibold mb-3">Leave a Rating and Review</h3>
 
