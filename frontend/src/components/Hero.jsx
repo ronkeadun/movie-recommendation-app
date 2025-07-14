@@ -50,8 +50,8 @@ const Hero = () => {
   return (
     <div className="text-white relative mt-20">
       <div className="absolute top-70 left-10">
-        <h1 className="text-4xl font-bold mb-2">Welcome To MovieFlix</h1>
-        <p className="max-w-2xl text-gray-200">This is a place you can get personalized movie recommendations</p>
+        <h1 className="text-4xl font-bold mb-2 text-[#ffe400]">Welcome To MovieFlix</h1>
+        <p className="max-w-3xl font-bold text-gray-200">This is a place you can get personalized movie recommendations</p>
       </div>
       <img
         src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}

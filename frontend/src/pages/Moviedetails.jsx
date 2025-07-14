@@ -100,7 +100,7 @@ const Moviedetails = () => {
           </button>
 
           <div>
-            <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
+            <h1 className="text-4xl font-bold mb-2 text-[#ffe400]">{movie.title}</h1>
             <div className="flex items-center gap-4 mb-2">
               <span>⭐ {movie.vote_average?.toFixed(1)}</span>
               <span>{movie.release_date}</span>

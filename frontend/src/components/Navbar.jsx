@@ -1,14 +1,16 @@
-import { HelpCircle, LogOut, Search, Settings } from "lucide-react";
-import { Link } from "react-router-dom";
+import { LogOut, Search, Settings } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import { useState, useRef,useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
 const Navbar = () => {
   const { user, logout } = useAuthStore();
+  const [searchTerm, setSearchTerm] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
+  const navigate = useNavigate();
 
 
   // Close dropdown when clicking outside the Home Link
@@ -42,6 +44,42 @@ const Navbar = () => {
     navbar.classList.toggle("active")
   }
 
+  const GENRES = [
+    "action","adventure","animation","comedy","crime","documentary","drama",
+    "family","fantasy","history","horror","music","mystery","romance",
+    "scifi","sci-fi","thriller","war","western"
+  ];
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+
+    const tokens = searchTerm.trim().split(/\s+/);
+    let year = "";
+    let genre = "";
+    const titleTokens = [];
+
+    tokens.forEach((tok) => {
+      const lc = tok.toLowerCase();
+      if (/^\d{4}$/.test(tok)) {
+        year = tok;
+      } else if (!genre && GENRES.includes(lc)) {
+        genre = lc;
+      } else {
+        titleTokens.push(tok);
+      }
+    });
+
+    const title = titleTokens.join(" ");
+
+    const query = new URLSearchParams(
+      Object.fromEntries(Object.entries({ title, genre, year }).filter(([_,v]) => v))
+    ).toString();
+
+    navigate(`/search?${query}`);
+    setSearchTerm("");
+  };
+
   return (
     <header className=" bg-black text-gray-200 flex justify-between items-center p-4 h-20 text-sm md:text-[15px] font-medium text-nowrap">
       <Link to={"/"} className="cursor-pointer text-[#e50914] font-bold text-xl brightness-125">🎬MovieFlix</Link>
@@ -70,19 +108,25 @@ const Navbar = () => {
           )}
         </div>
 
-        <Link to={"/favorites"} className=" hover:text-[#e50914]">Favorites</Link>
-        <Link to={"/watchlist"} className=" hover:text-[#e50914]">Watchlists</Link>
-        <Link to={"#"} className=" hover:text-[#e50914]">Profile</Link>
+        <Link to={"/favorites"} className="hover:text-[#e50914]">Favorites</Link>
+        <Link to={"/watchlist"} className="hover:text-[#e50914]">Watchlists</Link>
+        <Link to={"/profile"} className="hover:text-[#e50914]">Profile</Link>
       </nav> 
 
       <div className="flex items-center space-x-4 relative">
           <div className="relative hidden md:inline-flex">
-            <input
-              type="text"
-              className="bg-[#333333] px-4 py-2 rounded-full min-w-72 pr-10 outline-none"
-              placeholder="Search..."
-            />
-            <Search className="absolute top-2 right-4 w-5 h-5" />
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-[#333333] px-4 py-2 rounded-full min-w-72 pr-10 focus:outline-none"
+                placeholder="Search..."
+              />
+              <button type="submit" className="cursor-pointer hover:text-[#e50914]">
+                <Search className="absolute top-2 right-4 w-5 h-5" />
+              </button>
+            </form>
           </div>
 
           <Link to={user ? "ai-recommendations" : "signin"}>
@@ -115,12 +159,9 @@ const Navbar = () => {
                     <span className="text-xs text-gray-400">{user.email}</span>
                   </div>
 
-                  <button className="flex items-center px-4 py-3 rounded-lg text-white bg-[#181818] hover:bg-[#1d1c1c] gap-3 cursor-pointer">
-                    <HelpCircle className="w-5 h-5" />
-                    Help Center
-                  </button>
-
-                  <button className="flex items-center px-4 py-3 rounded-lg text-white bg-[#181818] hover:bg-[#1d1c1c] gap-3 cursor-pointer">
+                  <button 
+                    onClick={()=> navigate("/profile") }
+                    className="flex items-center px-4 py-3 rounded-lg text-white bg-[#181818] hover:bg-[#1d1c1c] gap-3 cursor-pointer">
                     <Settings className="w-5 h-5" />
                     Settings
                   </button>
