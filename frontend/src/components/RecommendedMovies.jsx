@@ -53,7 +53,7 @@ const RecommendedMovies = ({ movieTitles }) => {
         <Link
           to={`/movie/${movie.id}`}
           key={movie.id}
-          className="bg-[#232323] rounded-lg overflow-hidden"
+          className="bg-black rounded-lg overflow-hidden transform hover:scale-105 transition duration-300"
         >
           {movie.poster_path ? (
             <img
