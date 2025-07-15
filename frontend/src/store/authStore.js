@@ -3,7 +3,7 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const API_BASE_URL = "http://localhost:5000/api/auth";
+const API_BASE_URL = "https://movie-recommendation-app-0xjr.onrender.com/api/auth";
 
 export const useAuthStore = create((set) => ({
   // initial states
