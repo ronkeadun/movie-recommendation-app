@@ -31,8 +31,8 @@ export const WatchListProvider = ({ children }) => {
     const fetchData = async () => {    
       try {
         const [watchlistRes, watchedRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/watchlist/${userId}`),
-          axios.get(`${API_BASE_URL}/api/watched/${userId}`)
+          axios.get(`${API_BASE_URL}/api/watchlist/${userId}`, { withCredentials: true }),
+          axios.get(`${API_BASE_URL}/api/watched/${userId}`, { withCredentials: true })
         ]);
         dispatch({ type: "SET_WATCHLIST", payload: Array.isArray(watchlistRes.data?.watchlist) ? watchlistRes.data.watchlist : [] });
         dispatch({ type: "SET_WATCHED", payload: Array.isArray(watchedRes.data?.watched) ? watchedRes.data.watched : [] });
@@ -47,7 +47,7 @@ export const WatchListProvider = ({ children }) => {
   // actions
   const addMovieToWatchlist = async (movie) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/api/watchlist`, { userId, movie });
+      const res = await axios.post(`${API_BASE_URL}/api/watchlist`, { userId, movie }, { withCredentials: true });
         dispatch({ type: "ADD_MOVIE_TO_WATCHLIST", payload: movie });
         toast.success("Successfully added to watchlists")
       } catch (err) {
@@ -62,7 +62,7 @@ export const WatchListProvider = ({ children }) => {
 
   const removeMovieFromWatchlist = async (movieId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/watchlist/${userId}/${movieId}`);
+      await axios.delete(`${API_BASE_URL}/api/watchlist/${userId}/${movieId}`, { withCredentials: true });
       dispatch({ type: "REMOVE_MOVIE_FROM_WATCHLIST", payload: movieId });
       toast.success("Successfully removed from watchlists")
     } catch (err) {
@@ -72,7 +72,7 @@ export const WatchListProvider = ({ children }) => {
 
   const addMovieToWatched = async (movie) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/api/watched`, { userId, movie });
+      const res = await axios.post(`${API_BASE_URL}/api/watched`, { userId, movie }, { withCredentials: true });
       dispatch({ type: "ADD_MOVIE_TO_WATCHED",  payload: movie });
       toast.success("Successfully added to watched")
     } catch (err) {
@@ -87,7 +87,7 @@ export const WatchListProvider = ({ children }) => {
 
   const moveToWatchlist = async (movie) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/api/watched/move`, { userId, movie });
+      const res = await axios.post(`${API_BASE_URL}/api/watched/move`, { userId, movie }, { withCredentials: true });
       dispatch({ type: "MOVE_TO_WATCHLIST", payload: movie });
       const { message } = res
       toast.success(message)
@@ -103,7 +103,7 @@ export const WatchListProvider = ({ children }) => {
 
   const removeFromWatched = async (movieId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/watched/${userId}/${movieId}`);
+      await axios.delete(`${API_BASE_URL}/api/watched/${userId}/${movieId}`, { withCredentials: true });
       dispatch({ type: "REMOVE_FROM_WATCHED", payload: movieId });
       toast.success("Successfully removed from watched")
     } catch (err) {

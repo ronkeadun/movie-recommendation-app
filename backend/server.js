@@ -1,5 +1,5 @@
+require('dotenv').config();
 const express = require('express');
-const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -13,7 +13,6 @@ const watchedRoutes = require('./routes/watched');
 const ratingReviewsRoutes = require('./routes/ratingReviews')
 const errorHandler = require('./middleware/errorHandler');
 
-dotenv.config();
 const app = express();
 
 app.use(cors({origin: process.env.CLIENT_BASE_URL, credentials: true}));

@@ -17,7 +17,7 @@ export const FavMovieProvider = ({ children }) => {
 
   useEffect(() => {
     if (userId){
-      axios.get(`${API_BASE_URL}/api/favorites/${userId}`)
+      axios.get(`${API_BASE_URL}/api/favorites/${userId}`,{ withCredentials: true })
       .then(res => setFavorites(res.data))
       .catch(err => console.error(err));
     }
@@ -26,7 +26,7 @@ export const FavMovieProvider = ({ children }) => {
 
   const addToFavorites = async (movie) => {
     try {
-      await axios.post(`${API_BASE_URL}/api/favorites`, { userId, movie });
+      await axios.post(`${API_BASE_URL}/api/favorites`, { userId, movie }, { withCredentials: true });
       setFavorites(prev => [...prev, movie]);
       toast.success("Successfully added to favorites")
     } catch (error) {
@@ -36,7 +36,7 @@ export const FavMovieProvider = ({ children }) => {
 
   const removeFromFavorites = async (movieId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/favorites/${userId}/${movieId}`);
+      await axios.delete(`${API_BASE_URL}/api/favorites/${userId}/${movieId}`, { withCredentials: true });
       setFavorites(prev => prev.filter(movie => movie.id !== movieId));
       toast.success("Successfully removed from favorites")
     } catch (error) {

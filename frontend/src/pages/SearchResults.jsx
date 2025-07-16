@@ -27,7 +27,7 @@ function SearchResults() {
           setMovies([]);
           return;
         }
-        const { data } = await axios.get(`${API_BASE_URL}/api/movies/search?${q}`);
+        const { data } = await axios.get(`${API_BASE_URL}/api/movies/search?${q}`, { withCredentials: true });
         setMovies(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error(err);

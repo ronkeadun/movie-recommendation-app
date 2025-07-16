@@ -3,7 +3,9 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const API_BASE_URL = "https://movie-recommendation-app-0xjr.onrender.com/api/auth";
+const SERVER_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
+
+const API_BASE_URL = `${SERVER_BASE_URL}/api/auth`;
 
 export const useAuthStore = create((set) => ({
   // initial states
