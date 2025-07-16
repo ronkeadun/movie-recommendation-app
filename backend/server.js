@@ -15,12 +15,29 @@ const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
-app.use(
+/*app.use(
   cors({
     origin: process.env.CLIENT_BASE_URL || "http://localhost:5173",
     credentials: true,
   })
-);
+);*/
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://tairon-movieflix.netlify.app'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
