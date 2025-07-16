@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 const { register, login, fetchUser, logout } = require('../controllers/authController');
 const {
   createUserValidator,
@@ -13,7 +14,7 @@ router.post('/signup', createUserValidator, validate, register);
 
 router.post('/login', signInUserValidator, validate, login);
 
-router.get("/fetch-user", fetchUser)
+router.get("/fetch-user", auth, fetchUser)
 
 router.post("/logout", logout)
 
