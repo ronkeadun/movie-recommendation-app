@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
@@ -24,6 +25,7 @@ function SearchResults() {
         const q = params.toString();
         if (!q) {
           setError("Please enter a search query.");
+          toast.error("Please enter a search query.");
           setMovies([]);
           return;
         }
@@ -32,6 +34,7 @@ function SearchResults() {
       } catch (err) {
         console.error(err);
         setError("Search failed. Try again.");
+        toast.error("Search failed. Try again.");
         setMovies([]);
       }
     };

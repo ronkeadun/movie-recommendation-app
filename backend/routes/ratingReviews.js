@@ -14,7 +14,7 @@ router.get('/:movieId', getReviews);
 
 router.post('/', auth, [
   body('movieId').notEmpty().withMessage('Movie ID is required'),
-  body('rating').isInt({min:1, max: 10}).withMessage('Rating must be an integer 1- 10').toInt(),
+  body('rating').isInt({min:1, max: 10}).withMessage('Rating must be an integer 1-10').toInt(),
   body('review').optional().isString()
 ], validate, addReview);
 

@@ -4,8 +4,6 @@ import { toast } from "react-hot-toast";
 import WatchListReducer from "./WatchListReducer";
 import { useAuthStore } from "../store/authStore"
 
-
-
 const API_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
 
 const initialState = {

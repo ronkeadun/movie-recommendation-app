@@ -62,7 +62,7 @@ exports.moveWatched = async (req, res) => {
       return res.status(404).json({ message: "Movie not found in watchlist" });
     }
 
-    // Remove movie from watchlist
+    // Remove movie from watchlist here
     watchlistDoc.watchlist = watchlistDoc.watchlist.filter(m => m.id !== movie.id);
     await watchlistDoc.save();
 
